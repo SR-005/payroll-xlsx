@@ -4,7 +4,7 @@ import customtkinter as ctk
 from tkinter import messagebox
 
 # Initialize the main application window
-ctk.set_appearance_mode("System")  # Modes: "System" (default), "Dark", "Light"
+ctk.set_appearance_mode("Dark")  # Set to Dark mode for white text
 ctk.set_default_color_theme("blue")  # Themes: "blue" (default), "green", "dark-blue"
 
 app = ctk.CTk()
@@ -48,19 +48,16 @@ def calculate_payroll():
         net_pay = total_earnings - total_deductions
 
         # Clear previous results
-        for widget in result_frame.winfo_children():
+        for widget in details_frame.winfo_children():
+            widget.destroy()
+        for widget in earnings_frame.winfo_children():
+            widget.destroy()
+        for widget in deductions_frame.winfo_children():
+            widget.destroy()
+        for widget in summary_frame.winfo_children():
             widget.destroy()
 
         # Display the results in three columns
-        headers = ["Details", "Earnings", "Deductions"]
-        for col, header in enumerate(headers):
-            ctk.CTkLabel(
-                result_frame, 
-                text=header, 
-                font=("Helvetica", 16, "bold"),  # Bold font for headers
-                text_color="black"  # Black color for headers
-            ).grid(row=0, column=col, padx=20, pady=10)
-
         # Column 1: Employee Details
         details = [
             ("Employee Name", data["Employee Name"]),
@@ -74,64 +71,118 @@ def calculate_payroll():
             ("ESI No", data["ESI No"]),
         ]
 
-        for row_idx, (field, value) in enumerate(details, start=1):
+        ctk.CTkLabel(
+            details_frame, 
+            text="Details", 
+            font=("Helvetica", 16, "bold"),  # Bold font for headers
+            text_color="white"  # White color for headers
+        ).pack(pady=10)
+
+        for field, value in details:
+            row_frame = ctk.CTkFrame(details_frame, fg_color="transparent")
+            row_frame.pack(fill="x", padx=10, pady=5)
             ctk.CTkLabel(
-                result_frame, 
+                row_frame, 
                 text=field, 
                 font=("Helvetica", 14),  # Regular font for fields
-                text_color="black"  # Black color for fields
-            ).grid(row=row_idx, column=0, padx=20, pady=5, sticky="w")
+                text_color="white"  # White color for fields
+            ).pack(side="left", padx=10)
             ctk.CTkLabel(
-                result_frame, 
+                row_frame, 
                 text=value, 
                 font=("Helvetica", 14),  # Regular font for values
-                text_color="black"  # Black color for values
-            ).grid(row=row_idx, column=0, padx=20, pady=5, sticky="e")
+                text_color="white"  # White color for values
+            ).pack(side="right", padx=10)
 
         # Column 2: Earnings
         earnings = [
             ("Basic Salary", f"₹{data['Basic Salary']}"),
             ("Conveyance", f"₹{data['Conveyance']}"),
             ("Special Allowance", f"₹{data['Special Allowance']}"),
-            ("Total Earnings", f"₹{total_earnings}"),
         ]
 
-        for row_idx, (field, value) in enumerate(earnings, start=1):
+        ctk.CTkLabel(
+            earnings_frame, 
+            text="Earnings", 
+            font=("Helvetica", 16, "bold"),  # Bold font for headers
+            text_color="white"  # White color for headers
+        ).pack(pady=10)
+
+        for field, value in earnings:
+            row_frame = ctk.CTkFrame(earnings_frame, fg_color="transparent")
+            row_frame.pack(fill="x", padx=10, pady=5)
             ctk.CTkLabel(
-                result_frame, 
+                row_frame, 
                 text=field, 
                 font=("Helvetica", 14),  # Regular font for fields
-                text_color="black"  # Black color for fields
-            ).grid(row=row_idx, column=1, padx=20, pady=5, sticky="w")
+                text_color="white"  # White color for fields
+            ).pack(side="left", padx=10)
             ctk.CTkLabel(
-                result_frame, 
+                row_frame, 
                 text=value, 
                 font=("Helvetica", 14),  # Regular font for values
-                text_color="black"  # Black color for values
-            ).grid(row=row_idx, column=1, padx=20, pady=5, sticky="e")
+                text_color="white"  # White color for values
+            ).pack(side="right", padx=10)
 
         # Column 3: Deductions
         deductions = [
             ("PF Deduction", f"₹{data['PF Deduction']}"),
             ("ESI Deduction", f"₹{data['ESI Deduction']}"),
             ("PT Deduction", f"₹{data['PT Deduction']}"),
+        ]
+
+        ctk.CTkLabel(
+            deductions_frame, 
+            text="Deductions", 
+            font=("Helvetica", 16, "bold"),  # Bold font for headers
+            text_color="white"  # White color for headers
+        ).pack(pady=10)
+
+        for field, value in deductions:
+            row_frame = ctk.CTkFrame(deductions_frame, fg_color="transparent")
+            row_frame.pack(fill="x", padx=10, pady=5)
+            ctk.CTkLabel(
+                row_frame, 
+                text=field, 
+                font=("Helvetica", 14),  # Regular font for fields
+                text_color="white"  # White color for fields
+            ).pack(side="left", padx=10)
+            ctk.CTkLabel(
+                row_frame, 
+                text=value, 
+                font=("Helvetica", 14),  # Regular font for values
+                text_color="white"  # White color for values
+            ).pack(side="right", padx=10)
+
+        # Summary Section
+        ctk.CTkLabel(
+            summary_frame, 
+            text="Summary", 
+            font=("Helvetica", 16, "bold"),  # Bold font for headers
+            text_color="white"  # White color for headers
+        ).pack(pady=10)
+
+        summary_data = [
+            ("Total Earnings", f"₹{total_earnings}"),
             ("Total Deductions", f"₹{total_deductions}"),
             ("Net Pay", f"₹{net_pay}"),
         ]
 
-        for row_idx, (field, value) in enumerate(deductions, start=1):
+        for field, value in summary_data:
+            row_frame = ctk.CTkFrame(summary_frame, fg_color="transparent")
+            row_frame.pack(fill="x", padx=10, pady=5)
             ctk.CTkLabel(
-                result_frame, 
+                row_frame, 
                 text=field, 
                 font=("Helvetica", 14),  # Regular font for fields
-                text_color="black"  # Black color for fields
-            ).grid(row=row_idx, column=2, padx=20, pady=5, sticky="w")
+                text_color="white"  # White color for fields
+            ).pack(side="left", padx=10)
             ctk.CTkLabel(
-                result_frame, 
+                row_frame, 
                 text=value, 
                 font=("Helvetica", 14),  # Regular font for values
-                text_color="black"  # Black color for values
-            ).grid(row=row_idx, column=2, padx=20, pady=5, sticky="e")
+                text_color="white"  # White color for values
+            ).pack(side="right", padx=10)
 
     except Exception as e:
         messagebox.showerror("Error", f"An error occurred: {str(e)}")
@@ -141,7 +192,7 @@ title_label = ctk.CTkLabel(
     app, 
     text="Employee Payroll Calculator", 
     font=("Helvetica", 24, "bold"),  # Larger and bold font for title
-    text_color="black"  # Black color for title
+    text_color="white"  # White color for title
 )
 title_label.pack(pady=30)
 
@@ -156,9 +207,22 @@ calculate_button = ctk.CTkButton(
 )
 calculate_button.pack(pady=20)
 
-# Frame to display results
-result_frame = ctk.CTkFrame(app)
-result_frame.pack(pady=20, padx=40, fill="both", expand=True)
+# Frames for Details, Earnings, and Deductions
+columns_frame = ctk.CTkFrame(app, fg_color="transparent")
+columns_frame.pack(fill="both", expand=True, padx=20, pady=10)
+
+details_frame = ctk.CTkFrame(columns_frame, fg_color="transparent")
+details_frame.pack(side="left", fill="both", expand=True, padx=10)
+
+earnings_frame = ctk.CTkFrame(columns_frame, fg_color="transparent")
+earnings_frame.pack(side="left", fill="both", expand=True, padx=10)
+
+deductions_frame = ctk.CTkFrame(columns_frame, fg_color="transparent")
+deductions_frame.pack(side="left", fill="both", expand=True, padx=10)
+
+# Frame for Summary
+summary_frame = ctk.CTkFrame(app, fg_color="transparent")
+summary_frame.pack(fill="x", padx=20, pady=20)
 
 # Run the application
 app.mainloop()
